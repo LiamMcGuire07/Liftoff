@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class Movement : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class Movement : MonoBehaviour
     [SerializeField] float dashDistance = 10; 
     [SerializeField] float dashDuration = 0.2f;
     [SerializeField] float dashCooldown = 5;
+    FuelSystem fuelSystem;
 
     Rigidbody rb;
     AudioSource audioSource;
@@ -41,6 +43,7 @@ public class Movement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
+        fuelSystem = GetComponent<FuelSystem>();
     }
 
     void FixedUpdate()
@@ -51,9 +54,18 @@ public class Movement : MonoBehaviour
 
     private void ProcessThrust()
     {
+        if (fuelSystem.GetCurrentFuel() <= 0)
+        {
+            mainEngineParticles.Stop();  
+            audioSource.Stop();
+            return; //No more thrusting when all out of fuel!
+
+        }
         if (thrust.IsPressed() && !isDashing)
         {
             StartThrusting();
+
+            fuelSystem.ConsumeFuel(5 * Time.fixedDeltaTime);
         }
         else
         {
@@ -73,6 +85,7 @@ public class Movement : MonoBehaviour
         {
             mainEngineParticles.Play();
         }
+        
     }
 
     private void StopThrusting()
@@ -139,13 +152,13 @@ public class Movement : MonoBehaviour
         }
     }
 
-    private System.Collections.IEnumerator PerformDash()
+    private IEnumerator PerformDash()
     {
-       
-        
+
+        fuelSystem.UseDash(100);
+
         AudioSource.PlayClipAtPoint(DashSFX, transform.position);
         
-
         canDash = false;
         isDashing = true;
 
@@ -157,6 +170,7 @@ public class Movement : MonoBehaviour
         isDashing = false;
 
         // Cooldown before another dash
+        fuelSystem.DashCooldown(5);
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }

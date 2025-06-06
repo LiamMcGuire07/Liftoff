@@ -8,13 +8,16 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] float levelLoadDelay = 2;
     [SerializeField] AudioClip successSFX;
     [SerializeField] AudioClip crashSFX;
+    [SerializeField] AudioClip powerUpSFX;
+    [SerializeField] AudioClip BreakSFX;
     [SerializeField] ParticleSystem successParticles;
     [SerializeField] ParticleSystem crashParticles;
+    [SerializeField] GameObject destroyedVFX;
 
     AudioSource audioSource;
+    FuelSystem fuelSystem;
+    Movement movement;
 
-    public GameObject fractured;
-    public float breakForce;
 
     bool isControllabe = true;
     bool isCollidable = true;
@@ -23,6 +26,9 @@ public class CollisionHandler : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        fuelSystem = GetComponent<FuelSystem>();
+        movement = GetComponent<Movement>();
+
     }
 
     // Update is called once per frame
@@ -56,16 +62,36 @@ public class CollisionHandler : MonoBehaviour
                 StartSuccessSequence();
                 break;
             case "Fuel":
-                Debug.Log("Fuel added!");
+                audioSource.Stop();
+                audioSource.PlayOneShot(powerUpSFX);
+                fuelSystem.RefillFuel(30);
+                Destroy(collision.gameObject);
                 break;
             case "Breakable":
-                Destroy(collision.gameObject);
-
+                // Needs to be dashing to break the rock!
+                if (movement.isDashing)
+                {
+                    
+                    AudioSource.PlayClipAtPoint(BreakSFX, transform.position);
+                    GenerateParticleSFX(collision);
+                    Destroy(collision.gameObject);
+                }
+                else
+                {
+                    StartCrashSequence();
+                };
                 break;
             default:
                 StartCrashSequence();
                 break;
         }
+    }
+
+    private void GenerateParticleSFX(Collision collision)
+    {
+        Vector3 vfxPosition = collision.transform.position + new Vector3(0, -2.5f, 0); // slight downward offset to make explosion centered
+        Instantiate(destroyedVFX, vfxPosition, Quaternion.identity);
+        Destroy(collision.gameObject);
     }
 
     void StartSuccessSequence()
@@ -106,16 +132,5 @@ public class CollisionHandler : MonoBehaviour
         SceneManager.LoadScene(nextScene);
     }
     
-    /* // FIGURE OUT LATER //
-    public void BreakObject()
-    {
-        GameObject frac = Instantiate(fractured, transform.position, transform.rotation);
-
-        foreach (Rigidbody rb in frac.GetComponentsInChildren<Rigidbody>())
-        {
-            Vector3 force = (rb.transform.position - transform.position).normalized * breakForce;
-            rb.AddForce(force);
-        }
-    }
-    */
+   
 }

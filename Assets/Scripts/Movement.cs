@@ -22,7 +22,7 @@ public class Movement : MonoBehaviour
     Rigidbody rb;
     AudioSource audioSource;
     bool canDash = true;
-    bool isDashing = false;
+    public bool isDashing = false;
 
     private void OnEnable()
     {
@@ -65,7 +65,7 @@ public class Movement : MonoBehaviour
         {
             StartThrusting();
 
-            fuelSystem.ConsumeFuel(5 * Time.fixedDeltaTime);
+            fuelSystem.ConsumeFuel(10 * Time.fixedDeltaTime);
         }
         else
         {
@@ -84,6 +84,22 @@ public class Movement : MonoBehaviour
         if (!mainEngineParticles.isPlaying)
         {
             mainEngineParticles.Play();
+        }
+
+        if (fuelSystem.fuel <= 50)
+        {
+            thrustStrength = 700;
+            rotationStrength = 50;
+        }
+        else if (fuelSystem.fuel <= 30)
+        {
+            thrustStrength = 600;
+            rotationStrength = 20;
+        }
+        else
+        {
+            thrustStrength = 1000;
+            rotationStrength = 100;
         }
         
     }
@@ -145,7 +161,8 @@ public class Movement : MonoBehaviour
     }
 
     public void Dash()
-    { 
+    {
+
         if (canDash && !isDashing)
         {
             StartCoroutine(PerformDash());
@@ -154,7 +171,12 @@ public class Movement : MonoBehaviour
 
     private IEnumerator PerformDash()
     {
+        if (fuelSystem.fuel < 20)
+        {
+            yield break; 
+        }
 
+        fuelSystem.ConsumeFuel(30);
         fuelSystem.UseDash(100);
 
         AudioSource.PlayClipAtPoint(DashSFX, transform.position);

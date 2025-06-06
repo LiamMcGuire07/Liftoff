@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class FuelSystem : MonoBehaviour
 {
-    private float fuel;
+    public float fuel;
     private float dash;
     public float maxDash = 100;
     public float lerpTimer;
@@ -42,7 +42,6 @@ public class FuelSystem : MonoBehaviour
 
     public void UpdateFuelUI()
     {
-        Debug.Log(fuel);
         float fillF = frontFuelBar.fillAmount;
         float fillB = backFuelBar.fillAmount;
         float fFraction = fuel / maxFuel;

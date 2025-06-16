@@ -9,14 +9,14 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] AudioClip successSFX;
     [SerializeField] AudioClip crashSFX;
     [SerializeField] AudioClip powerUpSFX;
-    [SerializeField] AudioClip BreakSFX;
     [SerializeField] ParticleSystem successParticles;
     [SerializeField] ParticleSystem crashParticles;
-    [SerializeField] GameObject destroyedVFX;
+
 
     AudioSource audioSource;
     FuelSystem fuelSystem;
     Movement movement;
+    Break broke;
 
 
     bool isControllabe = true;
@@ -64,17 +64,22 @@ public class CollisionHandler : MonoBehaviour
             case "Fuel":
                 audioSource.Stop();
                 audioSource.PlayOneShot(powerUpSFX);
-                fuelSystem.RefillFuel(30);
+                fuelSystem.RefillFuel(50);
                 Destroy(collision.gameObject);
                 break;
             case "Breakable":
                 // Needs to be dashing to break the rock!
                 if (movement.isDashing)
                 {
-                    
-                    AudioSource.PlayClipAtPoint(BreakSFX, transform.position);
-                    GenerateParticleSFX(collision);
-                    Destroy(collision.gameObject);
+                    var breakable = collision.gameObject.GetComponent<Break>();
+                    if (breakable != null)
+                    {
+                        breakable.TriggerBreak();
+                    }
+                    else
+                    {
+                        Destroy(collision.gameObject);
+                    }
                 }
                 else
                 {
@@ -87,12 +92,7 @@ public class CollisionHandler : MonoBehaviour
         }
     }
 
-    private void GenerateParticleSFX(Collision collision)
-    {
-        Vector3 vfxPosition = collision.transform.position + new Vector3(0, -2.5f, 0); // slight downward offset to make explosion centered
-        Instantiate(destroyedVFX, vfxPosition, Quaternion.identity);
-        Destroy(collision.gameObject);
-    }
+    
 
     void StartSuccessSequence()
     {

@@ -9,14 +9,19 @@ public class Movement : MonoBehaviour
     [SerializeField] InputAction dash; 
     [SerializeField] float thrustStrength = 1000;
     [SerializeField] float rotationStrength = 100;
+    [SerializeField, Range(1, 20)] private float fuelUsagePerSecond = 10;
+    [SerializeField, Range(1, 30)] float dashFuelConsumption = 30;
+    [SerializeField, Range(1, 10)] float dashDistance = 5;
+    [SerializeField] float dashDuration = 0.2f;
+    [SerializeField] float dashCooldown = 5;
+    private const float dashConsumption = 100;
     [SerializeField] AudioClip mainEngineSFX;
     [SerializeField] AudioClip DashSFX;
     [SerializeField] ParticleSystem mainEngineParticles;
     [SerializeField] ParticleSystem rightThrustParticles;
     [SerializeField] ParticleSystem leftThrustParticles;
-    [SerializeField] float dashDistance = 10; 
-    [SerializeField] float dashDuration = 0.2f;
-    [SerializeField] float dashCooldown = 5;
+    public float DashDistance => dashDistance;
+    public float DashDuration => dashDuration;
     FuelSystem fuelSystem;
 
     Rigidbody rb;
@@ -65,7 +70,7 @@ public class Movement : MonoBehaviour
         {
             StartThrusting();
 
-            fuelSystem.ConsumeFuel(10 * Time.fixedDeltaTime);
+            fuelSystem.ConsumeFuel(fuelUsagePerSecond * Time.fixedDeltaTime);
         }
         else
         {
@@ -157,7 +162,6 @@ public class Movement : MonoBehaviour
     {
         rb.freezeRotation = true;
         transform.Rotate(Vector3.forward * rotationThisFrame * Time.fixedDeltaTime);
-        rb.freezeRotation = false;
     }
 
     public void Dash()
@@ -176,15 +180,16 @@ public class Movement : MonoBehaviour
             yield break; 
         }
 
-        fuelSystem.ConsumeFuel(30);
-        fuelSystem.UseDash(100);
+        fuelSystem.ConsumeFuel(dashFuelConsumption);
+        fuelSystem.UseDash(dashConsumption);
 
         AudioSource.PlayClipAtPoint(DashSFX, transform.position);
         
         canDash = false;
         isDashing = true;
 
-        Vector3 dashForce = transform.right * (dashDistance / dashDuration);
+        
+        Vector3 dashForce = GetDashDirectionByRotation() * (dashDistance / dashDuration);
         rb.AddForce(dashForce, ForceMode.VelocityChange);
 
         yield return new WaitForSeconds(dashDuration);
@@ -192,12 +197,22 @@ public class Movement : MonoBehaviour
         isDashing = false;
 
         // Cooldown before another dash
-        fuelSystem.DashCooldown(5);
+        fuelSystem.DashCooldown(dashCooldown);
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
 
+    private Vector3 GetDashDirectionByRotation()
+    {
+        float zRotation = transform.eulerAngles.z;
 
-    
+        if (zRotation <= 15 || zRotation >= 345)
+            return Vector3.up;
+        else if (zRotation > 15 && zRotation <= 180)
+            return Vector3.left;
+        else
+            return Vector3.right;
+    }
+
 }
 

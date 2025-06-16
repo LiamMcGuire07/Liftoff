@@ -92,6 +92,7 @@ public class FuelSystem : MonoBehaviour
         }
     }
 
+    
     public void ConsumeFuel(float usage)
     {
         fuel -= usage;

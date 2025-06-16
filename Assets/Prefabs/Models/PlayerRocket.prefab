@@ -157,14 +157,16 @@ MonoBehaviour:
     m_Flags: 0
   thrustStrength: 1000
   rotationStrength: 100
+  fuelUsagePerSecond: 7.5
+  dashFuelConsumption: 20
+  dashDistance: 2.5
+  dashDuration: 0.2
+  dashCooldown: 5
   mainEngineSFX: {fileID: 8300000, guid: 92476346a2ad80e4ab6c4304d1ac0260, type: 3}
   DashSFX: {fileID: 8300000, guid: 4518a7e66f2539c4aa8ad8d1db61e048, type: 3}
   mainEngineParticles: {fileID: 7759793605365882206}
   rightThrustParticles: {fileID: 5360650744609419689}
   leftThrustParticles: {fileID: 7521118518499912398}
-  dashDistance: 2.5
-  dashDuration: 0.2
-  dashCooldown: 5
   isDashing: 0
 --- !u!54 &7590057949851450355
 Rigidbody:
@@ -330,7 +332,6 @@ MonoBehaviour:
   BreakSFX: {fileID: 8300000, guid: 39f9a6fed6e81ca42907045acbc8d026, type: 3}
   successParticles: {fileID: 3984207121606908379}
   crashParticles: {fileID: 2130773389612228819}
-  destroyedVFX: {fileID: 3610984719583289989, guid: 6b0c58dfdc453fa41ae68dc03be141dc, type: 3}
 --- !u!114 &3839624357259363794
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class CollisionHandler : MonoBehaviour
 {
     [SerializeField] float levelLoadDelay = 2;
+    [SerializeField, Range(1, 75)] float dashRestoreAmount = 50;
     [SerializeField] AudioClip successSFX;
     [SerializeField] AudioClip crashSFX;
     [SerializeField] AudioClip powerUpSFX;
@@ -16,7 +17,6 @@ public class CollisionHandler : MonoBehaviour
     AudioSource audioSource;
     FuelSystem fuelSystem;
     Movement movement;
-    Break broke;
 
 
     bool isControllabe = true;
@@ -34,10 +34,10 @@ public class CollisionHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RespondToDebugKeys();
+        /*RespondToDebugKeys(); */
     }
 
-    void RespondToDebugKeys()
+    /*void RespondToDebugKeys()
     {
         if (Keyboard.current.lKey.wasPressedThisFrame)
         {
@@ -47,7 +47,7 @@ public class CollisionHandler : MonoBehaviour
         {
             isCollidable = !isCollidable;
         }
-    }
+    } */
     private void OnCollisionEnter(Collision collision)
     {
         if (!isControllabe || !isCollidable)
@@ -62,9 +62,8 @@ public class CollisionHandler : MonoBehaviour
                 StartSuccessSequence();
                 break;
             case "Fuel":
-                audioSource.Stop();
-                audioSource.PlayOneShot(powerUpSFX);
-                fuelSystem.RefillFuel(50);
+                AudioSource.PlayClipAtPoint(powerUpSFX, transform.position);
+                fuelSystem.RefillFuel(dashRestoreAmount);
                 Destroy(collision.gameObject);
                 break;
             case "Breakable":

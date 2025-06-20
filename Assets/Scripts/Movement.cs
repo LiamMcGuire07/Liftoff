@@ -23,6 +23,7 @@ public class Movement : MonoBehaviour
     public float DashDistance => dashDistance;
     public float DashDuration => dashDuration;
     FuelSystem fuelSystem;
+    CollisionHandler collisionHandler;
 
     Rigidbody rb;
     AudioSource audioSource;

@@ -10,7 +10,7 @@ public class Break : MonoBehaviour
 
     AudioSource audioSource;
 
-    [HideInInspector] public new Rigidbody rigidbody;
+    [HideInInspector] public Rigidbody rb;
 
     public void TriggerBreak()
     {
@@ -29,21 +29,27 @@ public class Break : MonoBehaviour
 
     private void Reset()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
 
-        rigidbody.mass = 0.01f;
-        rigidbody.useGravity = false;
-        rigidbody.isKinematic = false;
+        rb.mass = 0.01f;
+        rb.useGravity = false;
+        rb.isKinematic = false;
 
+    #if UNITY_EDITOR
         if (UnityEditorInternal.InternalEditorUtility.tags.Contains("Breakable"))
         {
-            tag = "Breakable";
+            gameObject.tag = "Breakable";
         }
+        else
+        {
+            Debug.LogWarning("Tag 'Breakable' does not exist. Please add it manually in the Tag Manager.");
+        }
+    #endif
     }
 
     private void Awake()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
     }
 }

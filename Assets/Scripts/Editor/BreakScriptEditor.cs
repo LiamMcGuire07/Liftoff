@@ -72,7 +72,6 @@ public class BreakScriptEditor : Editor
                 return;
             }
 
-            // Start a new Undo group
             int group = Undo.GetCurrentGroup();
             Undo.IncrementCurrentGroup();
 
@@ -84,7 +83,7 @@ public class BreakScriptEditor : Editor
 
             Undo.RegisterCreatedObjectUndo(instance, "Swap to Prefab");
 
-            // Re-add Break script and copy settings
+            // Keep prefab settings
             Break newBreak = Undo.AddComponent<Break>(instance);
             newBreak.breakVFX = breakable.breakVFX;
             newBreak.breakableMaterial = breakable.breakableMaterial;
@@ -98,7 +97,7 @@ public class BreakScriptEditor : Editor
                 rb.isKinematic = false;
             }
 
-            // Apply Breakable tag
+            // Apply tag
             if (UnityEditorInternal.InternalEditorUtility.tags.Contains("Breakable"))
             {
                 instance.tag = "Breakable";

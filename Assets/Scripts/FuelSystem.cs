@@ -29,15 +29,6 @@ public class FuelSystem : MonoBehaviour
         dash = Mathf.Clamp(dash, 0, maxDash);
         UpdateFuelUI();
         UpdateDashUI();
-        if (Input.GetKeyUp(KeyCode.Q))
-        {
-            UseDash(100);
-        }
-        if (Input.GetKeyUp(KeyCode.R))
-        {
-            DashCooldown(5);
-           
-        }
     }
 
     public void UpdateFuelUI()

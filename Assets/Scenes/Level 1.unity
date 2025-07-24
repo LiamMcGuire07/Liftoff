@@ -1235,22 +1235,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 151d34a463cbc19459a944508026bae6, type: 3}
   m_PrefabInstance: {fileID: 1827474199}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &913492178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 913492176}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e1c2c5d19e0a0940bab36611d430b09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  breakVFX: {fileID: 3610984719583289989, guid: 6b0c58dfdc453fa41ae68dc03be141dc, type: 3}
-  breakableMaterial: {fileID: 2100000, guid: 6ba91ece8acf3ac4cbd154a537ab99e0, type: 2}
-  breakSFX: {fileID: 8300000, guid: 100868df2f93efb49a15ce27b231c2da, type: 3}
-  rb: {fileID: 0}
 --- !u!54 &913492179
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1396,6 +1380,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &913492184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 913492176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e1c2c5d19e0a0940bab36611d430b09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breakVFX: {fileID: 3610984719583289989, guid: 6b0c58dfdc453fa41ae68dc03be141dc, type: 3}
+  breakableMaterial: {fileID: 2100000, guid: 6ba91ece8acf3ac4cbd154a537ab99e0, type: 2}
+  breakSFX: {fileID: 8300000, guid: 100868df2f93efb49a15ce27b231c2da, type: 3}
+  rb: {fileID: 913492179}
 --- !u!1 &945255472 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0f54db866ebb482498933fde11d5f78e, type: 3}
@@ -3055,10 +3055,10 @@ PrefabInstance:
       addedObject: {fileID: 913492179}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 151d34a463cbc19459a944508026bae6, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 913492178}
+      addedObject: {fileID: 913492183}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 151d34a463cbc19459a944508026bae6, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 913492183}
+      addedObject: {fileID: 913492184}
   m_SourcePrefab: {fileID: 100100000, guid: 151d34a463cbc19459a944508026bae6, type: 3}
 --- !u!1 &1859801170 stripped
 GameObject:
